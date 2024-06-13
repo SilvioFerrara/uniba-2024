@@ -701,3 +701,49 @@ Il flusso dei dati nell'applicazione avviene nel seguente modo:
 Questo flusso assicura un'interazione efficiente e sincronizzata tra frontend e backend, consentendo agli utenti di gestire facilmente l'elenco delle attività tramite un'interfaccia utente reattiva e responsiva.
 
 
+### Documentazione dell'Utilizzo di Docker
+
+Il progetto Task List utilizza Docker per gestire sia il backend che il frontend in contenitori separati. L'utilizzo di Docker semplifica il processo di build, distribuzione e gestione dell'applicazione, garantendo un ambiente coerente tra sviluppo, test e produzione.
+
+#### Configurazione di Docker Compose
+
+La configurazione di Docker Compose si trova nel file `docker-compose.yml`. Questo file definisce i servizi per il backend e il frontend e come devono essere costruiti e avviati.
+
+```yaml
+version: '3'
+services:
+  backend:
+    build: ./backend-tasklist/bootreact
+    ports:
+      - "8080:8080"
+  frontend:
+    build: ./frontend-tasklist/task-app
+    ports:
+      - "3000:3000"
+```
+
+- **Backend**: Questo servizio utilizza la directory `./backend-tasklist/bootreact` per costruire l'immagine Docker e mappa la porta 8080 del contenitore alla porta 8080 della macchina host.
+- **Frontend**: Questo servizio utilizza la directory ./frontend-tasklist/task-app per costruire l'immagine Docker e mappa la porta 3000 del contenitore alla porta 3000 della macchina host.
+
+#### Comandi Docker
+
+Per costruire e avviare i contenitori, puoi utilizzare i seguenti comandi:
+
+- **Build**:
+  ```bash
+  docker compose build
+  ```
+
+- **Up**:
+  ```bash
+  docker compose up
+  ```
+
+### Errori
+
+Durante il tentativo di build dei contenitori con il comando `docker compose build`, potrebbe verificarsi l'errore seguente:
+
+```
+ERROR [frontend 2/2] COPY target/bootreact-0.0.1-SNAPSHOT.jar app.jar
+failed to solve: failed to compute cache key: failed to calculate checksum of ref 2c03f682-6fe0-4da9-a507-b4381b6ecde8::79y0t8clkjf1yu3va0dku4kl8: "/target/bootreact-0.0.1-SNAPSHOT.jar": not found
+```
