@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;//CANC?
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.javainuse.bootreact.model.Task;
@@ -21,6 +21,7 @@ import com.javainuse.bootreact.model.Task;
 public class TaskController {
 
 	private List<Task> tasks = createList();
+
 
 	@RequestMapping(value = "/tasks", method = RequestMethod.GET,
 	produces = "application/json")
@@ -75,7 +76,6 @@ public class TaskController {
         }
         return null;
     }
-
 
 	private static List<Task> createList() {
 		List<Task> tempTasks = new ArrayList<>();

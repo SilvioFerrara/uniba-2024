@@ -1,0 +1,10 @@
+version: '3'
+services:
+  backend:
+    build: ./backend-tasklist\bootreact
+    ports:
+      - "8080:8080"
+  frontend:
+    build: ./frontend-tasklist\task-app
+    ports:
+      - "3000:3000"

@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom'
 import { deleteTaskById, getTaskList } from "./api/TaskAPIService";
+import { getScore, incrementScore } from "./api/ScoreAPIService";
 
 export default function ListTasksApp(){
     const [tasks, setEmployee] = useState([])
@@ -10,9 +11,10 @@ export default function ListTasksApp(){
     
     const navigate = useNavigate()
 
-    useEffect(
-        () => getTasks(), []
-    )
+    useEffect(() => {
+        getTasks();
+        fetchScore();
+    }, []);
 
     function getTasks() {
         console.log('Fetching Task')
@@ -31,7 +33,7 @@ export default function ListTasksApp(){
         console.log(response);
     }
 
-    function deleteEmployee(id) {
+    function deleteTask(id) {
         console.log('delete task ' + id);
         deleteTaskById(id)
             .then(() => {
@@ -46,7 +48,7 @@ export default function ListTasksApp(){
         navigate(`/edit-task/${id}`)
         console.log('update task' +id);
     }
-     function addNewEmployee() {
+     function addNewTask() {
         navigate('/add-task')
         console.log('/add-task')
     }
@@ -55,12 +57,17 @@ export default function ListTasksApp(){
         console.log('complete task ' + id);
         deleteTaskById(id)
             .then(() => {
-                setScore(score + 1); // Incrementa il punteggio
+                // Incrementa il punteggio
+                incrementScore().then(response => setScore(response.data)); 
                 setDeleteStatus('Completed task with ' + id + ' successfully.');
                 getTasks();
             })
             .catch((response) => onError(response))
             .finally(() => console.log('Finally done'));
+    }
+
+    function fetchScore() {
+        getScore().then(response => setScore(response.data));
     }
         return (
         <div className="container">
@@ -86,7 +93,7 @@ export default function ListTasksApp(){
                                     <tr key={task.id}>
                                         <td>{task.id}</td>
                                         <td>{task.name}</td>
-                                        <td><button className="btn btn-danger" onClick={() => deleteEmployee(task.id)}>Delete Task</button></td>
+                                        <td><button className="btn btn-danger" onClick={() => deleteTask(task.id)}>Delete Task</button></td>
                                         <td><button className="btn btn-warning" onClick={() => updateTask(task.id)}>Update Task</button></td>
                                         <td><button className="btn btn-success" onClick={() => completeEmployee(task.id)}>Complete</button></td>
                                     </tr>
@@ -97,7 +104,7 @@ export default function ListTasksApp(){
                     </tbody>
                 </table>
                 {/* <Link to = "/add-task" className = "btn btn-primary mb-2" > Add Task </Link> */}
-                <button className = "btn btn-primary mb-2" onClick={addNewEmployee }>Add Task</button>
+                <button className = "btn btn-primary mb-2" onClick={addNewTask }>Add Task</button>
             </div>
             
 
