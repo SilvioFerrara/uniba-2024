@@ -188,9 +188,13 @@ Esempio di utilizzo con `curl`:
 
 #### Frontend (React)
 
-- **emp-app/**
+- **task-app/**
   - **public/**: Contiene l'HTML statico e altri asset pubblici.
   - **src/**: Contiene il codice sorgente React per il frontend.
+      - **api**: Contiene il file `TaskAPIService.js` per le chiamate API.
+      - **components**: Contiene i componenti React come `TaskApp`, `ListTasksApp`, `UpdateTaskApp`, e `TaskComponent`.
+      - **App.js**: Punto di ingresso principale per il frontend.
+      - **index.js**: File principale per il rendering dell'applicazione React.
   - **package.json**: File di configurazione di npm per le dipendenze e gli script.
 
 ### Documentazione Backend per il Progetto "TaskList"
@@ -402,6 +406,71 @@ Questa documentazione fornisce una panoramica del frontend del progetto "Uniba T
 
 Il progetto frontend è strutturato con React e utilizza Axios per gestire le chiamate API al backend.
 
+##### File di Configurazione di npm (`package.json`)
+
+Il file `package.json` gestisce le dipendenze e gli script per il progetto frontend.
+
+```json
+{
+  "name": "task-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.21.1",
+    "bootstrap": "^5.1.3",
+    "react": "^17.0.2",
+    "react-bootstrap": "^1.6.4",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^6.0.2",
+    "react-scripts": "4.0.3",
+    "web-vitals": "^1.0.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
+```
+
+#### Servizi API (`TaskAPIService.js`)
+
+Il file `TaskAPIService.js` contiene funzioni per interagire con le API RESTful del backend utilizzando Axios.
+
+```javascript
+import axios from "axios";
+
+const TASK_BASE_REST_API_URL = 'http://localhost:8080/tasks';
+
+export const getTaskList = () => axios.get(TASK_BASE_REST_API_URL);
+
+export const deleteTaskById = (id) => axios.delete(`${TASK_BASE_REST_API_URL}/${id}`);
+
+export const createTask = (task) => axios.post(TASK_BASE_REST_API_URL, task);
+
+export const getTaskById = (id) => axios.get(`${TASK_BASE_REST_API_URL}/${id}`);
+
+export const updateTask = (id, task) => axios.put(`${TASK_BASE_REST_API_URL}/${id}`, task);
+```
 ##### Componente Principale `App.js`
 
 Il componente principale `App.js` costituisce il punto di ingresso dell'applicazione React.Esso include il componente ListTasksApp per visualizzare e gestire l'elenco delle attività.
@@ -420,6 +489,33 @@ function App() {
 }
 
 export default App;
+```
+
+##### `TaskApp.js`
+
+Gestisce le rotte utilizzando `react-router-dom`.
+
+```javascript
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import ListTasksApp from "./ListTasksApp";
+import TaskComponent from "./TaskComponent";
+
+export default function TaskApp() {
+  return (
+    <div>
+      <BrowserRouter>
+        <div className="container">
+          <Routes>
+            <Route path="/" element={<ListTasksApp />} />
+            <Route path="/tasks" element={<ListTasksApp />} />
+            <Route path="/add-task" element={<TaskComponent />} />
+            <Route path="/edit-task/:id" element={<TaskComponent />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </div>
+  );
+}
 ```
 
 ##### Componente `ListTasksApp.js`
