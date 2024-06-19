@@ -1,4 +1,15 @@
-FROM openjdk:17-jdk-slim
-VOLUME /tmp
-COPY target/bootreact-0.0.1-SNAPSHOT.jar app.jar
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+# Usa un'immagine base di Node.js
+FROM node:18-alpine
+
+# Imposta la directory di lavoro
+WORKDIR /task-app
+
+# Copia il resto dei file del progetto
+COPY public/ /task-app/public
+COPY src/ /task-app/src
+COPY package.json /task-app/
+
+# Installa le dipendenze
+RUN npm install
+
+CMD ["npm", "start"]
